@@ -13,18 +13,18 @@ abstract type _Size end
 struct DynamicSize <: _Size end
 struct StaticSize{S} <: _Size
     function StaticSize{S}() where {S}
-        return new{S::Tuple{Vararg{Int}}}()
+        return new{S::Tuple{Vararg{Integer}}}()
     end
 end
 
-@pure StaticSize(s::Tuple{Vararg{Int}}) = StaticSize{s}()
-@pure StaticSize(s::Int...) = StaticSize{s}()
+@pure StaticSize(s::Tuple{Vararg{Integer}}) = StaticSize{s}()
+@pure StaticSize(s::Integer...) = StaticSize{s}()
 @pure StaticSize(s::Type{<:Tuple}) = StaticSize{tuple(s.parameters...)}()
 
 # Some @pure convenience functions for `StaticSize`
 @pure get(::Type{StaticSize{S}}) where {S} = S
 @pure get(::StaticSize{S}) where {S} = S
-@pure Base.getindex(::StaticSize{S}, i::Int) where {S} = i <= length(S) ? S[i] : 1
+@pure Base.getindex(::StaticSize{S}, i::Integer) where {S} = i <= length(S) ? S[i] : 1
 @pure Base.ndims(::StaticSize{S}) where {S} = length(S)
 @pure Base.length(::StaticSize{S}) where {S} = prod(S)
 
